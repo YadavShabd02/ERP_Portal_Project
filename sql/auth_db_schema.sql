@@ -1,0 +1,11 @@
+CREATE DATABASE IF NOT EXISTS auth_db;
+USE auth_db;
+
+CREATE TABLE IF NOT EXISTS auth_table (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    `role` ENUM('STUDENT', 'INSTRUCTOR', 'ADMIN') NOT NULL,
+    password_hash VARCHAR(100) NOT NULL,
+    status ENUM('ACTIVE', 'LOCKED') NOT NULL DEFAULT 'ACTIVE',
+    last_login TIMESTAMP
+);
