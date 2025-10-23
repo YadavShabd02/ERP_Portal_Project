@@ -2,14 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import javax.swing.border.EmptyBorder;
 
-public class Login extends JFrame {
+public class IIITDLoginPage extends JFrame {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
 
-    public Login() {
+    public IIITDLoginPage() {
         setTitle("ERP Login - IIIT Delhi");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -19,10 +21,10 @@ public class Login extends JFrame {
             private Image backgroundImage;
             {
                 try {
-                    backgroundImage = new ImageIcon("background.jpeg").getImage();
+                    backgroundImage = new ImageIcon("background.jpg").getImage();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.err.println("Background image not found! Make sure 'background.jpeg' is in your classpath.");
+                    System.err.println("Background image not found! Make sure 'background.jpg' is in your classpath.");
                 }
             }
 
@@ -53,7 +55,7 @@ public class Login extends JFrame {
         };
         loginPanel.setOpaque(false);
         loginPanel.setLayout(new GridBagLayout());
-        loginPanel.setPreferredSize(new Dimension(550, 650));
+        loginPanel.setPreferredSize(new Dimension(550, 500));
         loginPanel.setBackground(Color.decode("#FFFFFF"));
         loginPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
 
@@ -62,50 +64,25 @@ public class Login extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
 
-        JLabel logoLabel = new JLabel();
-        logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        try {
-            ImageIcon originalIcon = new ImageIcon("logo.jpg");
-            Image image = originalIcon.getImage();
-            Image newimg = image.getScaledInstance(150, 75, java.awt.Image.SCALE_SMOOTH);
-            logoLabel.setIcon(new ImageIcon(newimg));
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Logo image not found! Make sure 'logo.jpg' is in your classpath.");
-            logoLabel.setText("IIIT-D Logo"); // Fallback text
-            logoLabel.setFont(new Font("Open Sans", Font.BOLD, 22));
-        }
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 15, 0);
-        loginPanel.add(logoLabel, gbc);
-
-        JLabel instituteNameLabel = new JLabel("INDRAPRASTHA INSTITUTE OF");
-        instituteNameLabel.setFont(new Font("Open Sans", Font.PLAIN, 16));
-        instituteNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 2, 0);
-        loginPanel.add(instituteNameLabel, gbc);
-
-        JLabel infoTechLabel = new JLabel("INFORMATION TECHNOLOGY");
-        infoTechLabel.setFont(new Font("Open Sans", Font.PLAIN, 16));
-        infoTechLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridy = 2;
-        gbc.insets = new Insets(0, 0, 2, 0);
-        loginPanel.add(infoTechLabel, gbc);
-
-        JLabel delhiLabel = new JLabel("DELHI");
-        delhiLabel.setFont(new Font("Open Sans", Font.BOLD, 16));
-        delhiLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridy = 3;
-        gbc.insets = new Insets(0, 0, 25, 0);
-        loginPanel.add(delhiLabel, gbc);
-
-        JLabel signInText = new JLabel("Sign in to your ERP");
-        signInText.setFont(new Font("Open Sans", Font.BOLD, 22));
+        JLabel signInText = new JLabel("Sign-in to your ERP");
+        signInText.setFont(new Font("Open Sans", Font.BOLD, 30));
         signInText.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 4;
         gbc.insets = new Insets(0, 0, 20, 0);
         loginPanel.add(signInText, gbc);
+
+        JLabel infoLabel = new JLabel("<html><center>Please log in with your University email ID for accessing the ERP system. <br>The below username and password is only for some specific user.</center></html>");
+        infoLabel.setFont(new Font("Open Sans", Font.BOLD, 12));
+        infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridy = 5;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        loginPanel.add(infoLabel, gbc);
+
+        JSeparator separator = new JSeparator();
+        separator.setForeground(Color.LIGHT_GRAY);
+        gbc.gridy = 6;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        loginPanel.add(separator, gbc);
 
         JLabel usernameLabel = new JLabel("Username");
         usernameLabel.setFont(new Font("Open Sans", Font.BOLD, 16));
@@ -113,11 +90,28 @@ public class Login extends JFrame {
         gbc.insets = new Insets(0, 0, 5, 0);
         loginPanel.add(usernameLabel, gbc);
 
-        usernameField = new JTextField(25);
+        usernameField = new JTextField("Enter your username here", 25);
         usernameField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY),
-                BorderFactory.createEmptyBorder(10, 12, 10, 12)));
+        BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+        BorderFactory.createEmptyBorder(10, 12, 10, 12)));
         usernameField.setFont(new Font("Open Sans", Font.PLAIN, 18));
+        usernameField.setForeground(Color.GRAY);
+        usernameField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (usernameField.getText().equals("Enter your username here")) {
+                    usernameField.setText("");
+                    usernameField.setForeground(Color.BLACK);
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (usernameField.getText().isEmpty()) {
+                    usernameField.setForeground(Color.GRAY);
+                    usernameField.setText("Enter your username here");
+                }
+            }
+        });
         gbc.gridy = 8;
         gbc.insets = new Insets(0, 0, 15, 0);
         loginPanel.add(usernameField, gbc);
@@ -128,11 +122,31 @@ public class Login extends JFrame {
         gbc.insets = new Insets(0, 0, 5, 0);
         loginPanel.add(passwordLabel, gbc);
 
-        passwordField = new JPasswordField(25);
+        passwordField = new JPasswordField("Enter your password here", 25);
         passwordField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY),
                 BorderFactory.createEmptyBorder(10, 12, 10, 12)));
         passwordField.setFont(new Font("Open Sans", Font.PLAIN, 18));
+        passwordField.setForeground(Color.GRAY);
+        passwordField.setEchoChar((char) 0);
+        passwordField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (String.valueOf(passwordField.getPassword()).equals("Enter your password here")) {
+                    passwordField.setText("");
+                    passwordField.setForeground(Color.BLACK);
+                    passwordField.setEchoChar('\u2022');
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (String.valueOf(passwordField.getPassword()).isEmpty()) {
+                    passwordField.setForeground(Color.GRAY);
+                    passwordField.setText("Enter your password here");
+                    passwordField.setEchoChar((char) 0);
+                }
+            }
+        });
         gbc.gridy = 10;
         gbc.insets = new Insets(0, 0, 5, 0);
         loginPanel.add(passwordField, gbc);
@@ -174,9 +188,9 @@ public class Login extends JFrame {
         loginButton.setContentAreaFilled(false);
         loginButton.setBackground(Color.decode("#3FADA8")); 
         loginButton.setForeground(Color.WHITE);
-        loginButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        loginButton.setFont(new Font("Open Sans", Font.BOLD, 18));
         loginButton.setFocusPainted(false);
-        loginButton.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         gbc.gridy = 12;
@@ -194,9 +208,9 @@ public class Login extends JFrame {
                 System.out.println("Username: " + username);
                 System.out.println("Password: " + password);
                 if ("admin".equals(username) && "password".equals(password)) {
-                    JOptionPane.showMessageDialog(Login.this, "Login Successful!");
+                    JOptionPane.showMessageDialog(IIITDLoginPage.this, "Login Successful!");
                 } else {
-                    JOptionPane.showMessageDialog(Login.this, "Invalid Username or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(IIITDLoginPage.this, "Invalid Username or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -206,7 +220,7 @@ public class Login extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Login loginPage = new Login();
+            IIITDLoginPage loginPage = new IIITDLoginPage();
             loginPage.setVisible(true);
         });
     }
