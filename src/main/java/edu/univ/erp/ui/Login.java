@@ -25,7 +25,7 @@ public class IIITDLoginPage extends JFrame {
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("Background image not found! Make sure 'background.jpg' is in your classpath.");
-                }
+         }
             }
 
             @Override
